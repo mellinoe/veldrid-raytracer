@@ -1,0 +1,44 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26124.0
+MinimumVisualStudioVersion = 15.0.26124.0
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E39D03E2-266E-4574-8AC0-B5ABF4CFAA37}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "raytracer", "src\raytracer\raytracer.csproj", "{B302EB87-35D5-4AFA-9B38-C225306CC333}"
+EndProject
+Global
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Debug|x64.Build.0 = Debug|Any CPU
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Debug|x86.Build.0 = Debug|Any CPU
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Release|x64.ActiveCfg = Release|Any CPU
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Release|x64.Build.0 = Release|Any CPU
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Release|x86.ActiveCfg = Release|Any CPU
+		{B302EB87-35D5-4AFA-9B38-C225306CC333}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B302EB87-35D5-4AFA-9B38-C225306CC333} = {E39D03E2-266E-4574-8AC0-B5ABF4CFAA37}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9DF51212-FB98-43DA-B534-38A1DB58B1EB}
+	EndGlobalSection
+EndGlobal

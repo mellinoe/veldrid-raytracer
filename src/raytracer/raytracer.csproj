@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>RayTracer</RootNamespace>
+    <ShaderOutputPath>$(BaseIntermediateOutputPath)Shaders</ShaderOutputPath>
+    <!-- In Debug mode, preserve all of the shader code, not just the compiled bytecode. -->
+    <ListAllShaderPaths Condition="'$(Configuration)' == 'Debug'">true</ListAllShaderPaths>
+    <LangVersion>Latest</LangVersion>
+    <ShaderContentIncludePath>Shaders</ShaderContentIncludePath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Veldrid" Version="4.2.0" />
+    <PackageReference Include="Veldrid.StartupUtilities" Version="4.2.0" />
+    <PackageReference Include="ShaderGen.Primitives" Version="$(ShaderGenVersion)" />
+    <PackageReference Include="ShaderGen.Build" Version="$(ShaderGenVersion)" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>
