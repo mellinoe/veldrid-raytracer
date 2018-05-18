@@ -49,15 +49,14 @@ namespace RayTracer
             VeldridStartup.CreateWindowAndGraphicsDevice(
                 new WindowCreateInfo(100, 100, (int)(Width * ViewScale), (int)(Height * ViewScale), WindowState.Normal, "Veldrid Ray Tracer"),
                 new GraphicsDeviceOptions(debug: false, swapchainDepthFormat: null, syncToVerticalBlank: false),
-                GraphicsBackend.Vulkan,
                 out _window,
                 out _gd);
             _window.Resized += () => _gd.ResizeMainWindow((uint)_window.Width, (uint)_window.Height);
 
             _randState = (uint)new Random().Next();
 
-            //CreateBookScene(ref _randState);
-            CreateToyPathTracerScene();
+            CreateBookScene(ref _randState);
+            //CreateToyPathTracerScene();
 
             Debug.Assert(_spheres.Length == _materials.Length);
             _sceneParams.SphereCount = (uint)_spheres.Length;
@@ -498,7 +497,7 @@ namespace RayTracer
                     extension = "330.glsl";
                     break;
                 case GraphicsBackend.Metal:
-                    extension = "macos.metallib";
+                    extension = "metallib";
                     break;
                 case GraphicsBackend.OpenGLES:
                     extension = "300.glsles";
