@@ -1,30 +1,46 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Runtime.InteropServices;
 
 namespace RayTracer
 {
     [StructLayout(LayoutKind.Sequential)]
-    public readonly struct Material
+    public struct Material
     {
-        public readonly Vector3 Albedo;
-        public readonly MaterialType Type;
-        public readonly float FuzzOrRefIndex;
-        private readonly float _padding0;
-        private readonly float _padding1;
-        private readonly float _padding2;
+        public Vector3 Albedo;
+        public MaterialType Type;
+        public float FuzzOrRefIndex;
+        public float _padding0;
+        public float _padding1;
+        public float _padding2;
 
-        private Material(MaterialType type, Vector3 albedo, float fuzzOrRefIndex)
+        public static Material Lambertian(Vector3 albedo)
         {
-            Albedo = albedo;
-            Type = type;
-            FuzzOrRefIndex = fuzzOrRefIndex;
-
-            _padding0 = _padding1 = _padding2 = 0;
+            Material m;
+            m.Type = MaterialType.Lambertian;
+            m.Albedo = albedo;
+            m.FuzzOrRefIndex = 0;
+            m._padding0 = m._padding1 = m._padding2 = 0;
+            return m;
         }
 
-        public static Material Lambertian(Vector3 albedo) => new Material(MaterialType.Lambertian, albedo, 0f);
-        public static Material Metal(Vector3 albedo, float fuzz) => new Material(MaterialType.Metal, albedo, MathF.Min(1, fuzz));
-        public static Material Dielectric(float refIndex) => new Material(MaterialType.Dielectric, Vector3.Zero, refIndex);
+        public static Material Metal(Vector3 albedo, float fuzz)
+        {
+            Material m;
+            m.Type = MaterialType.Metal;
+            m.Albedo = albedo;
+            m.FuzzOrRefIndex = fuzz;
+            m._padding0 = m._padding1 = m._padding2 = 0;
+            return m;
+        }
+
+        public static Material Dielectric(float refIndex)
+        {
+            Material m;
+            m.Type = MaterialType.Dielectric;
+            m.Albedo = Vector3.Zero;
+            m.FuzzOrRefIndex = refIndex;
+            m._padding0 = m._padding1 = m._padding2 = 0;
+            return m;
+        }
     }
 }

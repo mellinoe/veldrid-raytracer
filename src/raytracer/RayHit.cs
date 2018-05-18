@@ -4,17 +4,19 @@ using System.Runtime.InteropServices;
 namespace RayTracer
 {
     [StructLayout(LayoutKind.Sequential)]
-    public readonly struct RayHit
+    public struct RayHit
     {
-        public readonly Vector3 Position;
-        public readonly float T;
-        public readonly Vector3 Normal;
+        public Vector3 Position;
+        public float T;
+        public Vector3 Normal;
 
-        public RayHit(Vector3 position, float t, Vector3 normal)
+        public static RayHit Create(Vector3 position, float t, Vector3 normal)
         {
-            Position = position;
-            T = t;
-            Normal = normal;
+            RayHit hit;
+            hit.Position = position;
+            hit.T = t;
+            hit.Normal = normal;
+            return hit;
         }
     }
 }

@@ -3,18 +3,20 @@ using System.Numerics;
 
 namespace RayTracer
 {
-    public readonly struct Sphere
+    public struct Sphere
     {
-        public readonly Vector3 Center;
-        public readonly float Radius;
+        public Vector3 Center;
+        public float Radius;
 
-        public Sphere(Vector3 center, float radius)
+        public static Sphere Create(Vector3 center, float radius)
         {
-            Center = center;
-            Radius = radius;
+            Sphere s;
+            s.Center = center;
+            s.Radius = radius;
+            return s;
         }
 
-        public static bool Hit(in Sphere sphere, in Ray ray, float tMin, float tMax, out RayHit hit)
+        public static bool Hit(Sphere sphere, Ray ray, float tMin, float tMax, out RayHit hit)
         {
             Vector3 oc = ray.Origin - sphere.Center;
             float a = Vector3.Dot(ray.Direction, ray.Direction);
@@ -29,7 +31,7 @@ namespace RayTracer
                 {
                     Vector3 position = Ray.PointAt(ray, t);
                     Vector3 normal = (position - sphere.Center) / sphere.Radius;
-                    hit = new RayHit(Ray.PointAt(ray, t), t, normal);
+                    hit = RayHit.Create(Ray.PointAt(ray, t), t, normal);
                     return true;
                 }
                 t = (-b + tmp) / a;
@@ -37,12 +39,14 @@ namespace RayTracer
                 {
                     Vector3 position = Ray.PointAt(ray, t);
                     Vector3 normal = (position - sphere.Center) / sphere.Radius;
-                    hit = new RayHit(position, t, normal);
+                    hit = RayHit.Create(position, t, normal);
                     return true;
                 }
             }
 
-            hit = default;
+            hit.Position = new Vector3();
+            hit.Normal = new Vector3();
+            hit.T = 0;
             return false;
         }
     }
