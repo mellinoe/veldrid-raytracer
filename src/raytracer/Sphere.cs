@@ -18,10 +18,13 @@ namespace RayTracer
 
         public static bool Hit(Sphere sphere, Ray ray, float tMin, float tMax, out RayHit hit)
         {
-            Vector3 oc = ray.Origin - sphere.Center;
-            float a = Vector3.Dot(ray.Direction, ray.Direction);
-            float b = Vector3.Dot(oc, ray.Direction);
-            float c = Vector3.Dot(oc, oc) - sphere.Radius * sphere.Radius;
+            Vector3 center = sphere.Center;
+            Vector3 oc = ray.Origin - center;
+            Vector3 rayDir = ray.Direction;
+            float a = Vector3.Dot(rayDir, rayDir);
+            float b = Vector3.Dot(oc, rayDir);
+            float radius = sphere.Radius;
+            float c = Vector3.Dot(oc, oc) - radius * radius;
             float discriminant = b * b - a * c;
             if (discriminant > 0)
             {
@@ -30,7 +33,7 @@ namespace RayTracer
                 if (t < tMax && t > tMin)
                 {
                     Vector3 position = Ray.PointAt(ray, t);
-                    Vector3 normal = (position - sphere.Center) / sphere.Radius;
+                    Vector3 normal = (position - center) / radius;
                     hit = RayHit.Create(Ray.PointAt(ray, t), t, normal);
                     return true;
                 }
@@ -38,7 +41,7 @@ namespace RayTracer
                 if (t < tMax && t > tMin)
                 {
                     Vector3 position = Ray.PointAt(ray, t);
-                    Vector3 normal = (position - sphere.Center) / sphere.Radius;
+                    Vector3 normal = (position - center) / radius;
                     hit = RayHit.Create(position, t, normal);
                     return true;
                 }
