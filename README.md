@@ -13,3 +13,9 @@ This is a .NET Core application, so you will need [the .NET Core SDK](https://ww
 By default, the ray tracing will be done on the GPU. You can change this by setting `_drawModeCPU` to true. When drawing on the CPU, you may want to lower the `Width` and `Height` of the output image, as well as the `NumSamples` used. These are all found at the top of RayTracingApplication.cs.
 
 You can force a different graphics API to be used by changing the `backend` variable at the beginning of `RayTracingApplication.Run()`. By default, the application will automatically choose the "platform default" graphics API.
+
+There's two scenes included in the program. Uncomment one of the **Create__Scene** methods to use a different scene.
+
+## See Also
+
+[Ray Tracing in One Weekend](http://in1weekend.blogspot.com/2016/01/ray-tracing-in-one-weekend.html) by Peter Shirley. Most of the general structure of this ray tracer is based on the code from this book.

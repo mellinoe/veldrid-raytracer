@@ -72,7 +72,6 @@ namespace RayTracer.Shaders
                     else
                     {
                         color += currentAttenuation;
-                        // return Vector4.Zero;
                         break;
                     }
                 }

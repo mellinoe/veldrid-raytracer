@@ -36,7 +36,6 @@ namespace RayTracer
         private Material[] _materials;
         private SceneParams _sceneParams;
 
-        private Camera _camera;
         private uint _randState;
         private Stopwatch _stopwatch;
         private ResourceSet _computeSet;
@@ -86,7 +85,7 @@ namespace RayTracer
             Vector3 lookAt = new Vector3(3, 0.5f, 0.65f);
             float distToFocus = (camPos - lookAt).Length();
             float aperture = 0.01f;
-            _camera = Camera.Create(
+            _sceneParams.Camera = Camera.Create(
                 camPos,
                 lookAt,
                 Vector3.UnitY,
@@ -160,7 +159,14 @@ namespace RayTracer
             float aperture = 0.1f;
             aperture *= 0.2f;
 
-            _camera = Camera.Create(lookfrom, lookat, new Vector3(0, 1, 0), 60, (float)Width / Height, aperture, distToFocus);
+            _sceneParams.Camera = Camera.Create(
+                lookfrom,
+                lookat,
+                Vector3.UnitY,
+                60,
+                (float)Width / Height,
+                aperture,
+                distToFocus);
 
             _spheres = new[]
             {
@@ -202,7 +208,6 @@ namespace RayTracer
         private void RenderFrame()
         {
             _sceneParams.FrameCount += 1;
-            _sceneParams.Camera = _camera; // TODO: REMOVE
 
             _cl.Begin();
 
@@ -272,7 +277,7 @@ namespace RayTracer
                     {
                         float u = (x + RandUtil.RandomFloat(ref state)) * invWidth;
                         float v = (y + RandUtil.RandomFloat(ref state)) * invHeight;
-                        Ray ray = Camera.GetRay(_camera, u, v, ref state);
+                        Ray ray = Camera.GetRay(_sceneParams.Camera, u, v, ref state);
                         color += Color(_sceneParams.SphereCount, _spheres, _materials, ref state, ref ray, 0, ref rayCount);
                     }
                     color /= NumSamples;
@@ -285,7 +290,14 @@ namespace RayTracer
             _totalRays += (uint)frameRays;
         }
 
-        public static Vector4 Color(uint sphereCount, Sphere[] spheres, Material[] materials, ref uint randState, ref Ray ray, int depth, ref int rayCount)
+        public static Vector4 Color(
+            uint sphereCount,
+            Sphere[] spheres,
+            Material[] materials,
+            ref uint randState,
+            ref Ray ray,
+            int depth,
+            ref int rayCount)
         {
             rayCount += 1;
             RayHit hit;
@@ -453,13 +465,16 @@ namespace RayTracer
                 BufferUsage.StructuredBufferReadOnly,
                 (uint)Unsafe.SizeOf<Sphere>()));
             _gd.UpdateBuffer(_spheresBuffer, 0, _spheres);
+
             _materialsBuffer = factory.CreateBuffer(new BufferDescription(
                 (uint)Unsafe.SizeOf<Material>() * _sceneParams.SphereCount,
                 BufferUsage.StructuredBufferReadOnly,
                 (uint)Unsafe.SizeOf<Material>()));
             _gd.UpdateBuffer(_materialsBuffer, 0, _materials);
 
-            _sceneParamsBuffer = factory.CreateBuffer(new BufferDescription((uint)Unsafe.SizeOf<SceneParams>(), BufferUsage.UniformBuffer));
+            _sceneParamsBuffer = factory.CreateBuffer(new BufferDescription(
+                (uint)Unsafe.SizeOf<SceneParams>(),
+                BufferUsage.UniformBuffer));
             _gd.UpdateBuffer(_sceneParamsBuffer, 0, new Vector4(0));
 
             _rayCountBuffer = factory.CreateBuffer(new BufferDescription(16, BufferUsage.StructuredBufferReadWrite, 4));
