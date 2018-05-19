@@ -46,9 +46,12 @@ namespace RayTracer
 
         public void Run()
         {
+            GraphicsBackend backend = VeldridStartup.GetPlatformDefaultBackend();
+
             VeldridStartup.CreateWindowAndGraphicsDevice(
                 new WindowCreateInfo(100, 100, (int)(Width * ViewScale), (int)(Height * ViewScale), WindowState.Normal, "Veldrid Ray Tracer"),
                 new GraphicsDeviceOptions(debug: false, swapchainDepthFormat: null, syncToVerticalBlank: false),
+                backend,
                 out _window,
                 out _gd);
             _window.Resized += () => _gd.ResizeMainWindow((uint)_window.Width, (uint)_window.Height);
