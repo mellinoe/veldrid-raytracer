@@ -17,7 +17,7 @@ namespace RayTracer
         public const uint Width = 1280;
         public const uint Height = 720;
         public const uint ViewScale = 1;
-        public const uint NumSamples = 16;
+        public const uint NumSamples = 4;
 
         private Sdl2Window _window;
         private GraphicsDevice _gd;
