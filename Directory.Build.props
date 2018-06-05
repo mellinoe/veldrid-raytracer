@@ -5,7 +5,7 @@
     <BinDir>$(RepositoryRootDirectory)bin</BinDir>
     <OutputPath>$([System.IO.Path]::GetFullPath('$(RepositoryRootDirectory)bin\$(Configuration)'))\$(MSBuildProjectName)</OutputPath>
     <BaseIntermediateOutputPath>$([System.IO.Path]::GetFullPath('$(RepositoryRootDirectory)bin\obj\$(MSBuildProjectName)'))\</BaseIntermediateOutputPath>
-    <ShaderGenVersion>1.2.96-beta2-g3177b71221</ShaderGenVersion>
+    <ShaderGenVersion>1.2.103-beta2-gc66f5f556a</ShaderGenVersion>
   </PropertyGroup>
   <PropertyGroup>
   </PropertyGroup>
