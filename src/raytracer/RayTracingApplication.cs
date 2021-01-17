@@ -509,7 +509,7 @@ namespace RayTracer
                     extension = "hlsl.bytes";
                     break;
                 case GraphicsBackend.Vulkan:
-                    extension = "450.glsl.spv";
+                    extension = "450.glsl";
                     break;
                 case GraphicsBackend.OpenGL:
                     extension = "330.glsl";
