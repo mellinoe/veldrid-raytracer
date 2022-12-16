@@ -17,8 +17,9 @@ namespace RayTracer
         public const uint Width = 1280;
         public const uint Height = 720;
         public const uint ViewScale = 1;
-        public const uint NumSamples = 100;
+        public const uint NumSamples = 16;
         public const uint MaxDepth = 50;
+        public const float Epsilon = 0.0005f;
 
         private Sdl2Window _window;
         private GraphicsDevice _gd;
@@ -310,7 +311,7 @@ namespace RayTracer
             uint hitID = 0;
             for (uint i = 0; i < sphereCount; i++)
             {
-                if (Sphere.Hit(spheres[i], ray, 0.001f, closest, out RayHit tempHit))
+                if (Sphere.Hit(spheres[i], ray, Epsilon, closest, out RayHit tempHit))
                 {
                     hitAnything = true;
                     hit = tempHit;

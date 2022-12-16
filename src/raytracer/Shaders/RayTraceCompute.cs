@@ -53,7 +53,7 @@ namespace RayTracer.Shaders
                 uint hitID = 0;
                 for (uint i = 0; i < sphereCount; i++)
                 {
-                    if (Sphere.Hit(Spheres[i], ray, 0.001f, closest, out RayHit tempHit))
+                    if (Sphere.Hit(Spheres[i], ray, RayTracingApplication.Epsilon, closest, out RayHit tempHit))
                     {
                         hitAnything = true;
                         hit = tempHit;
