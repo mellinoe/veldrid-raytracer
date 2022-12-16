@@ -17,7 +17,8 @@ namespace RayTracer
         public const uint Width = 1280;
         public const uint Height = 720;
         public const uint ViewScale = 1;
-        public const uint NumSamples = 4;
+        public const uint NumSamples = 100;
+        public const uint MaxDepth = 50;
 
         private Sdl2Window _window;
         private GraphicsDevice _gd;
@@ -45,7 +46,7 @@ namespace RayTracer
 
         public void Run()
         {
-            GraphicsBackend backend = VeldridStartup.GetPlatformDefaultBackend();
+            GraphicsBackend backend = GraphicsBackend.OpenGL;//VeldridStartup.GetPlatformDefaultBackend();
 
             VeldridStartup.CreateWindowAndGraphicsDevice(
                 new WindowCreateInfo(100, 100, (int)(Width * ViewScale), (int)(Height * ViewScale), WindowState.Normal, "Veldrid Ray Tracer"),
@@ -320,7 +321,7 @@ namespace RayTracer
 
             if (hitAnything)
             {
-                if (depth < 50 && Scatter(ray, hit, materials[hitID], ref randState, out Vector3 attenuation, out Ray scattered))
+                if (depth < MaxDepth && Scatter(ray, hit, materials[hitID], ref randState, out Vector3 attenuation, out Ray scattered))
                 {
                     return new Vector4(attenuation, 1f)
                         * Color(sphereCount, spheres, materials, ref randState, ref scattered, depth + 1, ref rayCount);

@@ -7,7 +7,7 @@ namespace RayTracer.Shaders
 {
     public class RayTraceCompute
     {
-        public const uint MaxDepth = 50;
+        public const uint MaxDepth = RayTracingApplication.MaxDepth;
 
         public StructuredBuffer<Sphere> Spheres;
         public StructuredBuffer<Material> Materials;
