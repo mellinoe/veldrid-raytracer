@@ -17,7 +17,7 @@ namespace RayTracer
         public const uint Width = 1280;
         public const uint Height = 720;
         public const uint ViewScale = 1;
-        public const uint NumSamples = 16;
+        public const uint NumSamples = 4;
         public const uint MaxDepth = 50;
         public const float Epsilon = 0.0005f;
 
@@ -38,6 +38,8 @@ namespace RayTracer
         private Material[] _materials;
         private SceneParams _sceneParams;
 
+        private CameraManager cameraManager;
+
         private uint _randState;
         private Stopwatch _stopwatch;
         private ResourceSet _computeSet;
@@ -45,6 +47,9 @@ namespace RayTracer
         private ulong _totalRays = 0;
         private bool _drawModeCPU = false;
         private bool disposedValue;
+        private float frameTime;
+
+        private bool[] directionKeys = new bool[4] { false, false, false, false };
 
         public void Run()
         {
@@ -54,6 +59,7 @@ namespace RayTracer
             {
                 _window.PumpEvents();
                 if (!_window.Exists) { break; }
+                handleIdleTime();
                 RenderFrame();
             }
         }
@@ -85,15 +91,55 @@ namespace RayTracer
             _randState = (uint)new Random().Next();
             _stopwatch = Stopwatch.StartNew();
 
-            _window.KeyDown += handleKeyboard;
+            _window.KeyDown += handleKeyDown;
+            _window.KeyUp += handleKeyUp;
         }
 
-        private void handleKeyboard(KeyEvent keyEvent)
+        private void handleKeyDown(KeyEvent keyEvent)
         {
-            if(keyEvent.Key == Key.Q)
+            switch (keyEvent.Key)
             {
-                _window.Close();
+                case Key.Q:
+                    _window.Close();
+                    break;
+                case Key.W:
+                    directionKeys[0] = true; 
+                    break;
+                case Key.A:
+                    directionKeys[1] = true;
+                    break;
+                case Key.S:
+                    directionKeys[2] = true;
+                    break;
+                case Key.D:
+                    directionKeys[3] = true;
+                    break;
             }
+        }
+
+        private void handleKeyUp(KeyEvent keyEvent)
+        {
+            switch (keyEvent.Key)
+            {
+                case Key.W:
+                    directionKeys[0] = false;
+                    break;
+                case Key.A:
+                    directionKeys[1] = false;
+                    break;
+                case Key.S:
+                    directionKeys[2] = false;
+                    break;
+                case Key.D:
+                    directionKeys[3] = false;
+                    break;
+            }
+        }
+
+        private void handleIdleTime()
+        {
+            cameraManager.ChangePosition(directionKeys, frameTime);
+            _sceneParams.Camera = cameraManager.Camera;
         }
 
         private void CreateBookScene(ref uint state)
@@ -102,14 +148,16 @@ namespace RayTracer
             Vector3 lookAt = new Vector3(3, 0.5f, 0.65f);
             float distToFocus = (camPos - lookAt).Length();
             float aperture = 0.01f;
-            _sceneParams.Camera = Camera.Create(
-                camPos,
+
+            cameraManager = new CameraManager(camPos,
                 lookAt,
                 Vector3.UnitY,
                 25f,
                 (float)Width / Height,
                 aperture,
                 distToFocus);
+
+            _sceneParams.Camera = cameraManager.Camera;
 
             List<Sphere> spheres = new List<Sphere>();
             List<Material> materials = new List<Material>();
@@ -176,14 +224,15 @@ namespace RayTracer
             float aperture = 0.1f;
             aperture *= 0.2f;
 
-            _sceneParams.Camera = Camera.Create(
-                lookfrom,
+            cameraManager = new CameraManager(lookfrom,
                 lookat,
                 Vector3.UnitY,
                 60,
                 (float)Width / Height,
                 aperture,
                 distToFocus);
+
+            _sceneParams.Camera = cameraManager.Camera;
 
             _spheres = new[]
             {
@@ -261,6 +310,7 @@ namespace RayTracer
             float rate = _totalRays / seconds;
             float mRate = rate / 1_000_000;
             float frameRate = _sceneParams.FrameCount / (float)_stopwatch.Elapsed.TotalSeconds;
+            frameTime = 1.0f / frameRate;
             _window.Title = $"Elapsed: {seconds} sec. | Rate: {mRate} MRays / sec. | {frameRate} fps";
         }
 
