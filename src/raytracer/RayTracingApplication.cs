@@ -48,6 +48,10 @@ namespace RayTracer
         private bool _drawModeCPU = false;
         private bool disposedValue;
         private float frameTime;
+        private bool firstMove = true;
+        private Vector2 lastMousePosition;
+        private bool moving = false;
+        private float sensitivity = 0.2f;
 
         private bool[] directionKeys = new bool[4] { false, false, false, false };
 
@@ -59,7 +63,7 @@ namespace RayTracer
             {
                 _window.PumpEvents();
                 if (!_window.Exists) { break; }
-                handleIdleTime();
+                updateFrame();
                 RenderFrame();
             }
         }
@@ -93,6 +97,9 @@ namespace RayTracer
 
             _window.KeyDown += handleKeyDown;
             _window.KeyUp += handleKeyUp;
+            _window.MouseDown += handleMouseInput;
+            _window.MouseUp += handleMouseInput;
+            _window.MouseMove += handleMouseMove;
         }
 
         private void handleKeyDown(KeyEvent keyEvent)
@@ -136,7 +143,39 @@ namespace RayTracer
             }
         }
 
-        private void handleIdleTime()
+        private void handleMouseInput(MouseEvent mouseEvent)
+        {
+            if(mouseEvent.MouseButton == MouseButton.Right && mouseEvent.Down) 
+            {
+                moving = true;
+            }
+            else
+            {
+                moving = false;
+            }
+        }
+
+        private void handleMouseMove(MouseMoveEventArgs mouseMoveEvent) 
+        {
+            if (moving)
+            {
+                if (firstMove)
+                {
+                    lastMousePosition = mouseMoveEvent.MousePosition;
+                    firstMove = false;
+                }
+                else
+                {
+                    Vector2 delta = sensitivity * (mouseMoveEvent.MousePosition - lastMousePosition);
+                    lastMousePosition = mouseMoveEvent.MousePosition;
+                    cameraManager.Yaw += delta.X;
+                    cameraManager.Pitch += delta.Y;
+                    cameraManager.ChangeViewAngle();
+                }
+            }
+        }
+
+        private void updateFrame()
         {
             cameraManager.ChangePosition(directionKeys, frameTime);
             _sceneParams.Camera = cameraManager.Camera;

@@ -12,6 +12,21 @@ namespace RayTracer
         public float Aspect;
         public float Aperture;
         public float FocusDist;
+
+        private float _pitch;
+        private float _yaw = -MathF.PI / 2f;
+
+        public float Yaw
+        {
+            get { return MathHelper.RadiansToDegrees(_yaw); }
+            set { _yaw = MathHelper.DegreesToRadians(value); }
+        }
+        public float Pitch
+        {
+            get { return MathHelper.RadiansToDegrees(_pitch); }
+            set { _pitch = MathHelper.DegreesToRadians(Math.Clamp(value, -89f, 89f)); }
+        }
+
         public Vector3 Origin;
         public Vector3 LookAt;
         public Vector3 Up;
@@ -61,6 +76,17 @@ namespace RayTracer
 
                 updateCamera(Origin + movement, LookAt + movement, Up);
             }
+        }
+
+        public void ChangeViewAngle()
+        {
+            LookAt.X = MathF.Cos(_pitch) * MathF.Cos(_yaw);
+            LookAt.Y = MathF.Sin(_pitch);
+            LookAt.Z = MathF.Cos(_pitch) * MathF.Sin(_yaw);
+
+            LookAt = -Vector3.Normalize(LookAt);
+
+            updateCamera(Origin, Origin + LookAt, Up);
         }
 
         private void updateCamera(Vector3 origin, Vector3 lookAt, Vector3 up)
