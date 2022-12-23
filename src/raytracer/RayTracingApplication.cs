@@ -12,7 +12,7 @@ using Veldrid.StartupUtilities;
 
 namespace RayTracer
 {
-    internal unsafe class RayTracingApplication
+    internal unsafe class RayTracingApplication : IDisposable
     {
         public const uint Width = 1280;
         public const uint Height = 720;
@@ -44,8 +44,21 @@ namespace RayTracer
         private Pipeline _computePipeline;
         private ulong _totalRays = 0;
         private bool _drawModeCPU = false;
+        private bool disposedValue;
 
         public void Run()
+        {
+            init();
+
+            while (_window.Exists)
+            {
+                _window.PumpEvents();
+                if (!_window.Exists) { break; }
+                RenderFrame();
+            }
+        }
+
+        private void init()
         {
             GraphicsBackend backend = GraphicsBackend.OpenGL;//VeldridStartup.GetPlatformDefaultBackend();
 
@@ -71,14 +84,16 @@ namespace RayTracer
 
             _randState = (uint)new Random().Next();
             _stopwatch = Stopwatch.StartNew();
-            while (_window.Exists)
-            {
-                _window.PumpEvents();
-                if (!_window.Exists) { break; }
-                RenderFrame();
-            }
 
-            _gd.Dispose();
+            _window.KeyDown += handleKeyboard;
+        }
+
+        private void handleKeyboard(KeyEvent keyEvent)
+        {
+            if(keyEvent.Key == Key.Q)
+            {
+                _window.Close();
+            }
         }
 
         private void CreateBookScene(ref uint state)
@@ -526,6 +541,26 @@ namespace RayTracer
             }
 
             return File.ReadAllBytes(Path.Combine(AppContext.BaseDirectory, "Shaders", $"{name}.{extension}"));
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    _gd.Dispose();
+                    _gd = null;
+                }
+
+                disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
