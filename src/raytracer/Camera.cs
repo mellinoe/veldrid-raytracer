@@ -36,7 +36,9 @@ namespace RayTracer
             if (directionKeys[0] || directionKeys[1] || directionKeys[2] || directionKeys[3])
             {
                 Vector3 movement = new Vector3(0, 0, 0);
-                Vector3 unitVector = new Vector3(LookAt.X, LookAt.Y, LookAt.Z);
+                Vector3 unitVector = Origin - LookAt;
+                unitVector.Y = 0;
+                unitVector = Vector3.Normalize(unitVector);
 
                 if (directionKeys[0])
                 {
